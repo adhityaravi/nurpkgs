@@ -25,4 +25,6 @@
   # Neovim plugins
   kulala-nvim = pkgs.callPackage ./pkgs/nvim/kulala {};
   goose-nvim = pkgs.callPackage ./pkgs/nvim/goose {};
+  nvchad-base46 = pkgs.callPackage ./pkgs/nvim/base46 {};
+  nvchad-ui = pkgs.callPackage ./pkgs/nvim/nvchad-ui {};
 }
