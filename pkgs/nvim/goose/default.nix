@@ -5,12 +5,12 @@
 }:
 vimUtils.buildVimPlugin {
   pname = "goose-nvim";
-  version = "1.0.1";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "azorng";
     repo = "goose.nvim";
-    rev = "v1.0.1";
+    rev = "v1.0.3";
     sha256 = "sha256-jVWggPmdINFNVHJSCpbTZq8wKwGjldu6PNSkb7naiQE=";
   };
 

@@ -11,6 +11,11 @@
   modules = import ./modules; # NixOS modules
   overlays = import ./overlays; # nixpkgs overlays
 
+  # CLI plugins
+  goose-cli = pkgs.callPackage ./pkgs/cli/goose {
+    writableTmpDirAsHomeHook = pkgs.writableTmpDirAsHomeHook or null;
+  };
+
   # Obsidian plugins
   obsidian-tasks = pkgs.callPackage ./pkgs/obsidian/tasks {};
   obsidian-everforest-enchanted =
@@ -23,9 +28,5 @@
   obsidian-drawio = pkgs.callPackage ./pkgs/obsidian/drawio {};
 
   # Neovim plugins
-  kulala-nvim = pkgs.callPackage ./pkgs/nvim/kulala {};
   goose-nvim = pkgs.callPackage ./pkgs/nvim/goose {};
-  nvchad-base46 = pkgs.callPackage ./pkgs/nvim/base46 {};
-  nvchad-ui = pkgs.callPackage ./pkgs/nvim/nvchad-ui {};
-  nvchad-volt = pkgs.callPackage ./pkgs/nvim/volt {};
 }
