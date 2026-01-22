@@ -11,22 +11,6 @@
   modules = import ./modules; # NixOS modules
   overlays = import ./overlays; # nixpkgs overlays
 
-  # CLI plugins
-  goose-cli = pkgs.callPackage ./pkgs/cli/goose {
-    writableTmpDirAsHomeHook = pkgs.writableTmpDirAsHomeHook or null;
-  };
-
-  # Obsidian plugins
-  obsidian-tasks = pkgs.callPackage ./pkgs/obsidian/tasks {};
-  obsidian-everforest-enchanted =
-    pkgs.callPackage ./pkgs/obsidian/everforest-enchanted {};
-  obsidian-minimal = pkgs.callPackage ./pkgs/obsidian/minimal {};
-  obsidian-minimal-settings =
-    pkgs.callPackage ./pkgs/obsidian/minimal-settings {};
-  obsidian-dataview = pkgs.callPackage ./pkgs/obsidian/dataview {};
-  obsidian-git = pkgs.callPackage ./pkgs/obsidian/git {};
-  obsidian-drawio = pkgs.callPackage ./pkgs/obsidian/drawio {};
-
   # Neovim plugins
-  goose-nvim = pkgs.callPackage ./pkgs/nvim/goose {};
+  skifree-nvim = pkgs.callPackage ./pkgs/nvim/skifree {};
 }
