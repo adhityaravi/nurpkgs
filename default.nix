@@ -13,4 +13,7 @@
 
   # Neovim plugins
   skifree-nvim = pkgs.callPackage ./pkgs/nvim/skifree {};
+
+  # Tools
+  sqlit = pkgs.callPackage ./pkgs/tools/sqlit {};
 }

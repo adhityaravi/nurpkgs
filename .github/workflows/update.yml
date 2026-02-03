@@ -1,0 +1,68 @@
+name: "Auto-update packages"
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Every Monday at 06:00 UTC
+  workflow_dispatch:
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      categories: ${{ steps.find.outputs.categories }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Discover package categories
+        id: find
+        run: |
+          categories=$(ls -d pkgs/*/ 2>/dev/null | xargs -I{} basename {} | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          echo "categories=$categories" >> "$GITHUB_OUTPUT"
+
+  update:
+    needs: discover
+    if: ${{ needs.discover.outputs.categories != '[]' }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        category: ${{ fromJson(needs.discover.outputs.categories) }}
+      fail-fast: false
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Install nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install tools
+        run: nix-env -iA nixpkgs.nix-update nixpkgs.just
+
+      - name: Update ${{ matrix.category }} packages
+        run: just update-category ${{ matrix.category }}
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create Pull Request
+        if: steps.changes.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(${{ matrix.category }}): auto-update package versions"
+          title: "chore(${{ matrix.category }}): auto-update package versions"
+          body: |
+            Automated version bump for **${{ matrix.category }}** packages via `nix-update`.
+
+            Review the diff and merge if CI passes.
+          branch: auto-update/${{ matrix.category }}
+          delete-branch: true
