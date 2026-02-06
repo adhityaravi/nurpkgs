@@ -16,4 +16,5 @@
 
   # Tools
   sqlit = pkgs.callPackage ./pkgs/tools/sqlit {};
+  uptimekit = pkgs.callPackage ./pkgs/tools/uptimekit {};
 }
