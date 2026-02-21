@@ -17,4 +17,5 @@
   # Tools
   sqlit = pkgs.callPackage ./pkgs/tools/sqlit {};
   uptimekit = pkgs.callPackage ./pkgs/tools/uptimekit {};
+  youtube-music-cli = pkgs.callPackage ./pkgs/tools/youtube-music-cli {};
 }
